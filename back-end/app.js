@@ -9,7 +9,7 @@ const app = express();
 
 // 🔹 Enable CORS for frontend (http://localhost:5173)
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: 'http://117.4.152.239:5173',
   credentials: true
 }));
 
