@@ -1,9 +1,9 @@
-const db = require('./config/db');
-const bcrypt = require('bcryptjs');
+const db = require("./config/db");
+const bcrypt = require("bcryptjs");
 
 const createTables = async () => {
   try {
-    console.log('Creating tables if not exist...');
+    console.log("Creating tables if not exist...");
 
     // Create Users Table
     await db.execute(`
@@ -37,25 +37,25 @@ const createTables = async () => {
       );
     `);
 
-    console.log('Tables created successfully.');
+    console.log("Tables created successfully.");
   } catch (error) {
-    console.error('Error creating tables:', error);
+    console.error("Error creating tables:", error);
     process.exit(1);
   }
 };
 
 const seedData = async () => {
   try {
-    console.log('Seeding database...');
+    console.log("Seeding database...");
 
-    const hashedPassword = await bcrypt.hash('password123', 10);
+    const hashedPassword = await bcrypt.hash("123456", 10);
 
     // Insert Admin User
     await db.execute(
       `INSERT INTO users (email, password, full_name, user_type, is_active) 
        VALUES (?, ?, ?, ?, ?) 
        ON DUPLICATE KEY UPDATE full_name = VALUES(full_name), user_type = VALUES(user_type), is_active = VALUES(is_active);`,
-      ['admin', hashedPassword, 'Admin User', 'admin', 1]
+      ["admin", hashedPassword, "Admin User", "admin", 1]
     );
 
     // Insert Regular User
@@ -63,13 +63,13 @@ const seedData = async () => {
       `INSERT INTO users (email, password, full_name, user_type, is_active) 
        VALUES (?, ?, ?, ?, ?) 
        ON DUPLICATE KEY UPDATE full_name = VALUES(full_name), user_type = VALUES(user_type), is_active = VALUES(is_active);`,
-      ['user', hashedPassword, 'Regular User', 'user', 1]
+      ["user", hashedPassword, "Regular User", "user", 1]
     );
 
-    console.log('Seeding completed successfully!');
+    console.log("Seeding completed successfully!");
     process.exit();
   } catch (error) {
-    console.error('Error seeding database:', error);
+    console.error("Error seeding database:", error);
     process.exit(1);
   }
 };

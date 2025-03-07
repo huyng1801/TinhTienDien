@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, InputNumber } from 'antd';
 
-const MonthlyDeviceTable = ({ readOnly, devices, onDeviceChange, totalPowerUsage }) => {
+const MonthlyDeviceTable = ({ readOnly, devices, onDeviceChange, totalPowerUsage, onDaysChange }) => {
   const columns = [
     { 
       title: 'Thứ tự', 
@@ -66,7 +66,20 @@ const MonthlyDeviceTable = ({ readOnly, devices, onDeviceChange, totalPowerUsage
       title: 'Số ngày sử dụng trong kỳ',
       dataIndex: 'daysPerPeriod',
       width: 120,
-      render: (text) => text
+      render: (text, record, index) => (
+        readOnly ? (
+          text
+        ) : (
+          <InputNumber
+            value={text}
+            onChange={value => onDaysChange(index, value)}
+            min={0}
+            max={31}
+            precision={1}
+            style={{ width: '100%' }}
+          />
+        )
+      )
     },
     {
       title: 'Điện năng sử dụng trong kỳ (kWh)',

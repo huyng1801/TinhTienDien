@@ -98,8 +98,8 @@ const AdditionalInfo = ({ readOnly, initialData }) => {
 
     const newDevices = { ...data.monthlyDevices };
     
-    // If the field is cosPhi or hoursPerDay, update all periods for the same device
-    if (field === 'cosPhi' || field === 'hoursPerDay') {
+    // Only sync hoursPerDay from first period to others
+    if (field === 'hoursPerDay' && periodKey === data.compensationData[0].key) {
       const deviceKey = newDevices[periodKey].devices[index].key;
       
       Object.keys(newDevices).forEach(key => {
@@ -136,6 +136,31 @@ const AdditionalInfo = ({ readOnly, initialData }) => {
         }, customerInfo.meterCount)
       };
       
+      newDevices[periodKey] = {
+        ...newDevices[periodKey],
+        devices
+      };
+      updateMonthlyDevices(newDevices);
+    }
+  }, [data.monthlyDevices, updateMonthlyDevices, customerInfo.meterCount, readOnly, data.compensationData]);
+
+  const handleDaysChange = useCallback((periodKey, index, value) => {
+    if (readOnly) return;
+
+    const newDevices = { ...data.monthlyDevices };
+    const devices = [...newDevices[periodKey].devices];
+    const deviceToUpdate = { ...devices[index] };
+
+    if (deviceToUpdate) {
+      devices[index] = {
+        ...deviceToUpdate,
+        daysPerPeriod: value,
+        powerUsage: calculatePowerUsage({
+          ...deviceToUpdate,
+          daysPerPeriod: value
+        }, customerInfo.meterCount)
+      };
+
       newDevices[periodKey] = {
         ...newDevices[periodKey],
         devices
@@ -279,6 +304,7 @@ const AdditionalInfo = ({ readOnly, initialData }) => {
             periodData={periodData}
             devices={devices}
             onDeviceChange={(index, field, value) => handleDeviceChange(periodData.key, index, field, value)}
+            onDaysChange={(index, value) => handleDaysChange(periodData.key, index, value)}
             paidElectricity={paidAmount}
             onPaidElectricityChange={(value) => handlePaidElectricityChange(periodData.key, value)}
             summaryData={summaryData}
@@ -300,7 +326,7 @@ const AdditionalInfo = ({ readOnly, initialData }) => {
         children: <SummaryTab calculationData={calculationData} />
       }
     ];
-  }, [data.compensationData, data.monthlyDevices, paidElectricity, calculationData, handleDeviceChange, handlePaidElectricityChange, readOnly, customerInfo.meterCount]);
+  }, [data.compensationData, data.monthlyDevices, paidElectricity, calculationData, handleDeviceChange, handleDaysChange, handlePaidElectricityChange, readOnly, customerInfo.meterCount]);
 
   return (
     <div>

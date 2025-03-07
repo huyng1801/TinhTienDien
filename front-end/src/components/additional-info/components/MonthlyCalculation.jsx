@@ -9,7 +9,8 @@ const MonthlyCalculation = ({
   readOnly,
   periodData, 
   devices, 
-  onDeviceChange, 
+  onDeviceChange,
+  onDaysChange,
   paidElectricity, 
   onPaidElectricityChange,
   summaryData,
@@ -41,6 +42,7 @@ const MonthlyCalculation = ({
           readOnly={readOnly}
           devices={devices}
           onDeviceChange={onDeviceChange}
+          onDaysChange={onDaysChange}
           totalPowerUsage={totalPowerUsage}
         />
 

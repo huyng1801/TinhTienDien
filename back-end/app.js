@@ -4,12 +4,16 @@ const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const calculationRoutes = require('./routes/calculationRoutes');
 
-dotenv.config();
-const app = express();
+dotenv.config(); // Load environment variables
 
-// 🔹 Enable CORS for frontend (http://localhost:5173)
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Convert CORS_ORIGINS from a comma-separated string to an array
+const allowedOrigins = process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',') : [];
+
 app.use(cors({
-  origin: 'http://117.4.152.239:5173',
+  origin: allowedOrigins,
   credentials: true
 }));
 
@@ -18,4 +22,4 @@ app.use(express.json());
 app.use('/users', userRoutes);
 app.use('/calculations', calculationRoutes);
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
