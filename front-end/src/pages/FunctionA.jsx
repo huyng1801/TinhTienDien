@@ -11,6 +11,7 @@ import {
 import CompensationCalculator from '../components/CompensationCalculator';
 import AdditionalInfo from '../components/additional-info/AdditionalInfo';
 import DeviceInventory from '../components/DeviceInventory';
+import DetailedCalculationView from '../components/DetailedCalculationView';
 import { useSharedData } from '../context/SharedDataContext';
 import { useCompensation } from '../context/CompensationContext';
 import { useAuth } from '../context/AuthContext';
@@ -114,9 +115,18 @@ const FunctionA = () => {
         </span>
       ),
       children: <AdditionalInfo />
+    },
+    {
+      key: '4',
+      label: (
+        <span>
+          <CalculatorOutlined />
+          Bảng tính chi tiết
+        </span>
+      ),
+      children: <DetailedCalculationView />
     }
   ];
-
   return (
     <div>
       <Card style={{ marginBottom: 16 }}>

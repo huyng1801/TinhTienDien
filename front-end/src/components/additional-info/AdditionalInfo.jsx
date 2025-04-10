@@ -98,8 +98,8 @@ const AdditionalInfo = ({ readOnly, initialData }) => {
 
     const newDevices = { ...data.monthlyDevices };
     
-    // Only sync hoursPerDay from first period to others
-    if (field === 'hoursPerDay' && periodKey === data.compensationData[0].key) {
+    // Sync hoursPerDay and cosPhi from first period to others
+    if ((field === 'hoursPerDay' || field === 'cosPhi') && periodKey === data.compensationData[0].key) {
       const deviceKey = newDevices[periodKey].devices[index].key;
       
       Object.keys(newDevices).forEach(key => {
@@ -120,10 +120,12 @@ const AdditionalInfo = ({ readOnly, initialData }) => {
     const deviceToUpdate = { ...devices[index] };
     
     if (deviceToUpdate) {
-      // Ensure value is a valid number and within bounds for hoursPerDay
+      // Ensure value is a valid number and within bounds
       let finalValue = value;
       if (field === 'hoursPerDay') {
         finalValue = Math.min(Math.max(0, Math.round(value || 0)), 24);
+      } else if (field === 'cosPhi') {
+        finalValue = Math.min(Math.max(0, value || 0), 1);
       }
 
       devices[index] = {
@@ -184,6 +186,7 @@ const AdditionalInfo = ({ readOnly, initialData }) => {
     };
     updateMonthlyDevices(newDevices);
   }, [readOnly, data.monthlyDevices, updateMonthlyDevices]);
+  
 
   // Memoize calculation data
   const calculationData = useMemo(() => {
