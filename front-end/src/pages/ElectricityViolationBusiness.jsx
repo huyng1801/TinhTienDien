@@ -8,16 +8,16 @@ import {
   SaveOutlined,
   LoadingOutlined
 } from '@ant-design/icons';
-import CompensationCalculator from '../components/CompensationCalculator';
-import AdditionalInfo from '../components/additional-info/AdditionalInfo';
+import CompensationCalculator from '../components/electricity-violation-business/CompensationCalculator';
 import DeviceInventory from '../components/DeviceInventory';
-import DetailedCalculationView from '../components/DetailedCalculationView';
-import { useSharedData } from '../context/SharedDataContext';
-import { useCompensation } from '../context/CompensationContext';
+import DetailedCalculationView from '../components/electricity-violation-business/DetailedCalculationView';
+import DetailedCalculationView3 from '../components/electricity-violation-business/DetailedCalculationView3';
+import { useSharedData } from '../context/electricity-violation-business/SharedDataContext';
+import { useCompensation } from '../context/electricity-violation-business/CompensationContext';
 import { useAuth } from '../context/AuthContext';
 import { calculationService } from '../services/calculationService';
 
-const FunctionA = () => {
+const ElectricityViolationBusiness = () => {
   const { 
     updateCustomerInfo, 
     customerInfo, 
@@ -110,21 +110,21 @@ const FunctionA = () => {
       key: '3',
       label: (
         <span>
-          <InfoCircleOutlined />
-          Bảng tính ĐN, TĐ - SHBT
+          <CalculatorOutlined />
+          Bảng tính chi tiết 1 giá
         </span>
       ),
-      children: <AdditionalInfo />
+      children: <DetailedCalculationView />
     },
     {
       key: '4',
       label: (
         <span>
           <CalculatorOutlined />
-          Bảng tính chi tiết
+          Bảng tính chi tiết 3 giá
         </span>
       ),
-      children: <DetailedCalculationView />
+      children: <DetailedCalculationView3 />
     }
   ];
   return (
@@ -137,7 +137,7 @@ const FunctionA = () => {
           onValuesChange={handleCustomerInfoChange}
         >
           <Space direction="vertical" style={{ width: '100%' }}>
-            <Space size="large" style={{ width: '100%' }}>
+            {/* <Space size="large" style={{ width: '100%' }}>
               <Form.Item
                 name="customerId"
                 label="Mã khách hàng"
@@ -175,7 +175,7 @@ const FunctionA = () => {
                   }}
                 />
               </Form.Item>
-            </Space>
+            </Space> */}
 
             <Space style={{ marginTop: 16 }}>
               <Button 
@@ -206,4 +206,4 @@ const FunctionA = () => {
   );
 };
 
-export default FunctionA;
+export default ElectricityViolationBusiness;

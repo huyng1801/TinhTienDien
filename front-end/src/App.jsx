@@ -1,18 +1,20 @@
+// src/App.jsx
 import React from 'react';
-import { AuthProvider } from './context/AuthContext';
-import { CompensationProvider } from './context/CompensationContext';
-import { SharedDataProvider } from './context/SharedDataContext';
+import { BrowserRouter as Router } from 'react-router-dom';
 import AppContent from './AppContent';
+import { ConfigProvider } from 'antd';
+import viVN from 'antd/locale/vi_VN';
+import AppProviders from './context/AppProviders';
 
 const App = () => {
   return (
-    <AuthProvider>
-      <SharedDataProvider>
-        <CompensationProvider>
+    <ConfigProvider locale={viVN}>
+      <Router>
+        <AppProviders>
           <AppContent />
-        </CompensationProvider>
-      </SharedDataProvider>
-    </AuthProvider>
+        </AppProviders>
+      </Router>
+    </ConfigProvider>
   );
 };
 

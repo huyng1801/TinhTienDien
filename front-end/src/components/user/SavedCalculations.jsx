@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Card, Button, message, Popconfirm, Space } from 'antd';
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import { calculationService } from '../services/calculationService';
+import { calculationService } from '../../services/calculationService';
 import dayjs from 'dayjs';
 
 const SavedCalculations = () => {

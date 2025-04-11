@@ -1,3 +1,4 @@
+// src/layouts/MainLayout.jsx
 import React from 'react';
 import { Layout, Menu, theme, Button, Space, Dropdown } from 'antd';
 import { 
@@ -7,18 +8,22 @@ import {
   SettingOutlined
 } from '@ant-design/icons';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const { Header, Content, Sider } = Layout;
 
-const MainLayout = ({ selectedFunction, setSelectedFunction, isAdmin, children }) => {
-  const { user, logout } = useAuth();
+const MainLayout = ({ children }) => {
+  const { user, logout, isAdmin } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  
   const {
     token: { colorBgContainer, colorPrimary, borderRadiusLG },
   } = theme.useToken();
 
   const menuItems = [
     {
-      key: 'A',
+      key: 'electricity-violation-household',
       icon: <CalculatorOutlined style={{ fontSize: '24px' }} />,
       label: (
         <div style={{ 
@@ -34,13 +39,46 @@ const MainLayout = ({ selectedFunction, setSelectedFunction, isAdmin, children }
         </div>
       ),
     },
-    
+    {
+      key: 'electricity-violation-business',
+      icon: <CalculatorOutlined style={{ fontSize: '24px' }} />,
+      label: (
+        <div style={{ 
+          padding: '12px 0',
+          lineHeight: '1.6'
+        }}>
+          <div style={{ fontSize: '13px', fontWeight: 500 }}>
+            Vi phạm sử dụng điện
+          </div>
+          <div style={{ fontSize: '13px', fontWeight: 500 }}>
+          cho mục đích kinh doanh
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: 'electricity-violation-production',
+      icon: <CalculatorOutlined style={{ fontSize: '24px' }} />,
+      label: (
+        <div style={{ 
+          padding: '12px 0',
+          lineHeight: '1.6'
+        }}>
+          <div style={{ fontSize: '13px', fontWeight: 500 }}>
+            Vi phạm sử dụng điện
+          </div>
+          <div style={{ fontSize: '13px', fontWeight: 500 }}>
+            cho mục đích sản xuất
+          </div>
+        </div>
+      ),
+    }
   ];
 
-  // Chỉ hiển thị menu quản lý người dùng cho admin
+  // Only show user management menu for admin
   if (isAdmin) {
     menuItems.push({
-      key: 'B',
+      key: 'user-management',
       icon: <UserOutlined style={{ fontSize: '24px' }} />,
       label: (
         <div style={{ 
@@ -72,9 +110,16 @@ const MainLayout = ({ selectedFunction, setSelectedFunction, isAdmin, children }
     if (key === 'logout') {
       logout();
     } else if (key === 'profile') {
-      setSelectedFunction('profile');
+      navigate('/profile');
     }
   };
+
+  const handleMenuClick = ({ key }) => {
+    navigate(`/${key}`);
+  };
+
+  // Get current selected key from path
+  const selectedKey = location.pathname.split('/')[1] || 'function-a';
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -139,7 +184,7 @@ const MainLayout = ({ selectedFunction, setSelectedFunction, isAdmin, children }
         >
           <Menu
             mode="inline"
-            selectedKeys={[selectedFunction]}
+            selectedKeys={[selectedKey]}
             style={{ 
               height: '100%', 
               border: 'none',
@@ -148,7 +193,7 @@ const MainLayout = ({ selectedFunction, setSelectedFunction, isAdmin, children }
             }}
             items={menuItems}
             className="custom-menu"
-            onClick={({ key }) => setSelectedFunction(key)}
+            onClick={handleMenuClick}
           />
         </Sider>
         <Layout style={{ marginLeft: 280, minHeight: 'calc(100vh - 64px)' }}>
