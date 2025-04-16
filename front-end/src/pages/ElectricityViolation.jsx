@@ -8,21 +8,22 @@ import {
   SaveOutlined,
   LoadingOutlined
 } from '@ant-design/icons';
-import CompensationCalculator from '../components/CompensationCalculator';
-import AdditionalInfo from '../components/additional-info/AdditionalInfo';
-import DeviceInventory from '../components/DeviceInventory';
-import DetailedCalculationView from '../components/DetailedCalculationView';
-import { useSharedData } from '../context/SharedDataContext';
-import { useCompensation } from '../context/CompensationContext';
+import CompensationCalculator from '../components/electricity-violation/CompensationCalculator';
+import AdditionalInfo from '../components/electricity-violation/additional-info/AdditionalInfo';
+import DeviceInventory from '../components/electricity-violation/DeviceInventory';
+import { useSharedData } from '../context//electricity-violation/SharedDataContext';
+import { useCompensation } from '../context//electricity-violation/CompensationContext';
 import { useAuth } from '../context/AuthContext';
 import { calculationService } from '../services/calculationService';
+import DeviceInventory2 from '../components/electricity-violation/DeviceInventory2';
 
-const ElectricityViolationHousehold = () => {
+const ElectricityViolation = () => {
   const { 
     updateCustomerInfo, 
     customerInfo, 
     resetAllData,
     deviceInventory,
+    bussinessDeviceInventory,
     monthlyDevices 
   } = useSharedData();
   const { 
@@ -97,7 +98,17 @@ const ElectricityViolationHousehold = () => {
       children: <DeviceInventory />
     },
     {
-      key: '2',
+        key: '2',
+        label: (
+          <span>
+            <TableOutlined />
+            Bảng kê SX-KD
+          </span>
+        ),
+        children: <DeviceInventory2 />
+      },
+    {
+      key: '3',
       label: (
         <span>
           <CalculatorOutlined />
@@ -107,7 +118,7 @@ const ElectricityViolationHousehold = () => {
       children: <CompensationCalculator />
     },
     {
-      key: '3',
+      key: '4',
       label: (
         <span>
           <InfoCircleOutlined />
@@ -196,4 +207,4 @@ const ElectricityViolationHousehold = () => {
   );
 };
 
-export default ElectricityViolationHousehold;
+export default ElectricityViolation;

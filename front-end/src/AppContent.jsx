@@ -9,6 +9,7 @@ import UserManagement from './pages/UserManagement';
 import UserProfile from './pages/UserProfile';
 import ElectricityViolationBusiness from './pages/ElectricityViolationBusiness';
 import ElectricityViolationProduction from './pages/ElectricityViolationProduction';
+import ElectricityViolation from './pages/ElectricityViolation';
 
 const AppContent = () => {
   const { user, isAdmin } = useAuth();
@@ -24,6 +25,7 @@ const AppContent = () => {
         <Route path="/electricity-violation-household" element={<ElectricityViolationHousehold />} />
         <Route path="/electricity-violation-business" element={<ElectricityViolationBusiness />} />
         <Route path="/electricity-violation-production" element={<ElectricityViolationProduction />} />
+        <Route path="/electricity-violation" element={<ElectricityViolation />} />
         {isAdmin && <Route path="/user-management" element={<UserManagement />} />}
         <Route path="/profile" element={<UserProfile />} />
         <Route path="*" element={<Navigate to="/electricity-violation-household" replace />} />

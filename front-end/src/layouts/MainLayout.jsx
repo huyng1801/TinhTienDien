@@ -72,6 +72,23 @@ const MainLayout = ({ children }) => {
           </div>
         </div>
       ),
+    },
+    {
+      key: 'electricity-violation',
+      icon: <CalculatorOutlined style={{ fontSize: '24px' }} />,
+      label: (
+        <div style={{ 
+          padding: '12px 0',
+          lineHeight: '1.6'
+        }}>
+          <div style={{ fontSize: '13px', fontWeight: 500 }}>
+            Vi phạm sử dụng điện
+          </div>
+          <div style={{ fontSize: '13px', fontWeight: 500 }}>
+            cho 3 mục đích
+          </div>
+        </div>
+      ),
     }
   ];
 

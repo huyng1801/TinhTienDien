@@ -13,27 +13,36 @@ import { SharedDataProvider as HouseholdSharedDataProvider } from './electricity
 import { CompensationProvider as ProductionCompensationProvider } from './electricity-violation-production/CompensationContext';
 import { SharedDataProvider as ProductionSharedDataProvider } from './electricity-violation-production/SharedDataContext';
 
+import { CompensationProvider as EVCompensationProvider } from './electricity-violation/CompensationContext';
+import { SharedDataProvider as EVSharedDataProvider } from './electricity-violation/SharedDataContext';
+
+
 const AppProviders = ({ children }) => {
   return (
     <AuthProvider>
-      <GlobalSharedDataProvider>
-        <GlobalCompensationProvider>
-          <BusinessSharedDataProvider>
-            <BusinessCompensationProvider>
-              <HouseholdSharedDataProvider>
-                <HouseholdCompensationProvider>
-                  <ProductionSharedDataProvider>
-                    <ProductionCompensationProvider>
-                      {children}
-                    </ProductionCompensationProvider>
-                  </ProductionSharedDataProvider>
-                </HouseholdCompensationProvider>
-              </HouseholdSharedDataProvider>
-            </BusinessCompensationProvider>
-          </BusinessSharedDataProvider>
-        </GlobalCompensationProvider>
-      </GlobalSharedDataProvider>
-    </AuthProvider>
+    <GlobalSharedDataProvider>
+      <GlobalCompensationProvider>
+        <BusinessSharedDataProvider>
+          <BusinessCompensationProvider>
+            <HouseholdSharedDataProvider>
+              <HouseholdCompensationProvider>
+                <ProductionSharedDataProvider>
+                  <ProductionCompensationProvider>
+                    <EVSharedDataProvider>
+                      <EVCompensationProvider>
+                        {children}
+                      </EVCompensationProvider>
+                    </EVSharedDataProvider>
+                  </ProductionCompensationProvider>
+                </ProductionSharedDataProvider>
+              </HouseholdCompensationProvider>
+            </HouseholdSharedDataProvider>
+          </BusinessCompensationProvider>
+        </BusinessSharedDataProvider>
+      </GlobalCompensationProvider>
+    </GlobalSharedDataProvider>
+  </AuthProvider>
+  
   );
 };
 

@@ -9,7 +9,7 @@ import {
   LoadingOutlined
 } from '@ant-design/icons';
 import CompensationCalculator from '../components/electricity-violation-production/CompensationCalculator';
-import DeviceInventory from '../components/DeviceInventory';
+import DeviceInventory from '../components/electricity-violation-production/DeviceInventory';
 import DetailedCalculationView from '../components/electricity-violation-production/DetailedCalculationView';
 import DetailedCalculationView3 from '../components/electricity-violation-production/DetailedCalculationView3';
 import { useSharedData } from '../context/electricity-violation-production/SharedDataContext';
@@ -137,7 +137,7 @@ const ElectricityViolationProduction = () => {
           onValuesChange={handleCustomerInfoChange}
         >
           <Space direction="vertical" style={{ width: '100%' }}>
-            {/* <Space size="large" style={{ width: '100%' }}>
+            <Space size="large" style={{ width: '100%' }}>
               <Form.Item
                 name="customerId"
                 label="Mã khách hàng"
@@ -175,7 +175,7 @@ const ElectricityViolationProduction = () => {
                   }}
                 />
               </Form.Item>
-            </Space> */}
+            </Space>
 
             <Space style={{ marginTop: 16 }}>
               <Button 
