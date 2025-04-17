@@ -64,26 +64,26 @@ const DetailedCalculationView = () => {
   const { oldPeriodDays, newPeriodDays } = compensationData.reduce((acc, period) => {
     const startDate = dayjs(period.startDate);
     const endDate = dayjs(period.endDate);
-    const violationDays = period.violationDays || 0;
+    const compensationDays = period.compensationDays || 0;
 
     // Check if period is in October 2024
     if (period.month === 10 && period.year === 2024) {
       // First half of October (1-10) goes to old period
       if (startDate.date() === 1) {
-        acc.oldPeriodDays += violationDays;
+        acc.oldPeriodDays += compensationDays;
       }
       // Second half of October (11-31) goes to new period
       else {
-        acc.newPeriodDays += violationDays;
+        acc.newPeriodDays += compensationDays;
       }
     }
     // Before October 2024 goes to old period
     else if (startDate.isBefore('2024-10-11')) {
-      acc.oldPeriodDays += violationDays;
+      acc.oldPeriodDays += compensationDays;
     }
     // After October 2024 goes to new period
     else {
-      acc.newPeriodDays += violationDays;
+      acc.newPeriodDays += compensationDays;
     }
 
     return acc;
@@ -161,7 +161,7 @@ const DetailedCalculationView = () => {
     },
     {
       title: 'Số ngày vi phạm (Ngày)',
-      dataIndex: 'violationDays',
+      dataIndex: 'compensationDays',
       width: 120,
       align: 'right'
     },

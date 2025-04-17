@@ -112,18 +112,18 @@ const DetailedCalculationView = () => {
   const { oldPeriodDays, newPeriodDays } = compensationData.reduce((acc, period) => {
     const startDate = dayjs(period.startDate);
     const endDate = dayjs(period.endDate);
-    const violationDays = period.violationDays || 0;
+    const compensationDays = period.compensationDays || 0;
 
     if (period.month === 10 && period.year === 2024) {
       if (startDate.date() === 1) {
-        acc.oldPeriodDays += violationDays;
+        acc.oldPeriodDays += compensationDays;
       } else {
-        acc.newPeriodDays += violationDays;
+        acc.newPeriodDays += compensationDays;
       }
     } else if (startDate.isBefore('2024-10-11')) {
-      acc.oldPeriodDays += violationDays;
+      acc.oldPeriodDays += compensationDays;
     } else {
-      acc.newPeriodDays += violationDays;
+      acc.newPeriodDays += compensationDays;
     }
 
     return acc;
@@ -222,7 +222,7 @@ const DetailedCalculationView = () => {
     },
     {
       title: 'Số ngày vi phạm (Ngày)',
-      dataIndex: 'violationDays',
+      dataIndex: 'compensationDays',
       width: 120,
       align: 'right',
     },
