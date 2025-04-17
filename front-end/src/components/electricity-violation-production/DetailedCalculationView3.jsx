@@ -138,7 +138,7 @@ const DetailedCalculationView = () => {
       )
     },
     {
-      title: 'Số giờ SDD trong ngày phải nhập',
+      title: 'Số giờ SDD trong ngày',
       dataIndex: 'hoursPerDay',
       width: 120,
       align: 'center',

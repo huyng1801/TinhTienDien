@@ -247,7 +247,7 @@ export const exportDetailedCalculation = async ({
         { value: 'Số lượng', rowspan: 3},
         { value: 'Công suất', rowspan: 3},
         { value: 'Cosφ phải nhập', rowspan: 3, yellow: true },
-        { value: 'Số giờ SDD trong ngày phải nhập', rowspan: 3, yellow: true },
+        { value: 'Số giờ SDD trong ngày', rowspan: 3, yellow: true },
         { value: 'Điện năng bình quân ngày (kWh)', rowspan: 3},
         { value: 'Số ngày vi phạm (Ngày)', rowspan: 3},
         { value: 'Điện năng sử dụng trong thời gian vi phạm (kWh)', rowspan: 3},
