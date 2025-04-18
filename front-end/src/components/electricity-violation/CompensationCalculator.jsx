@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 
 const { RangePicker } = DatePicker;
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 dayjs.locale('vi');
 
@@ -190,6 +190,46 @@ const CompensationCalculator = ({ readOnly, initialData }) => {
   };
 
   const totals = calculateTotals();
+  const calculateConclusionData = (dataToProcess) => {
+    if (!dataToProcess || dataToProcess.length === 0) {
+      return {
+        totalCompensation: 0,
+        oldPriceDays: 0,
+        newPriceDays: 0,
+        overallStartDate: null,
+        overallEndDate: null,
+        oldPriceEndDate: dayjs('2024-10-10'),
+        newPriceStartDate: dayjs('2024-10-11')
+      };
+    }
+
+    let oldPriceDays = 0;
+    let newPriceDays = 0;
+    let overallStartDate = dayjs(dataToProcess[0].startDate);
+    let overallEndDate = dayjs(dataToProcess[dataToProcess.length - 1].endDate);
+
+    dataToProcess.forEach(item => {
+        const itemCompensationDays = Math.max(0,(item.violationDays || 0) - (item.outageDays || 0));
+        
+        if (item.isOldPrice) {
+            oldPriceDays += itemCompensationDays;
+        } else {
+            newPriceDays += itemCompensationDays;
+        }
+    });
+
+    return {
+      totalCompensation: totals.totalCompensation,
+      oldPriceDays,
+      newPriceDays,
+      overallStartDate,
+      overallEndDate,
+      oldPriceEndDate: dayjs('2024-10-10'),
+      newPriceStartDate: dayjs('2024-10-11')
+    };
+  };
+
+  const conclusion = calculateConclusionData(data);
 
   return (
     <div>
@@ -254,6 +294,33 @@ const CompensationCalculator = ({ readOnly, initialData }) => {
           </Table.Summary>
         )}
       />
+ <div style={{ marginTop: 20, padding: '15px', border: '1px solid #f0f0f0', borderRadius: '4px', backgroundColor: '#fff' }}>
+         <Title level={5} style={{ marginBottom: '15px', color: '#0050b3' }}>Kết luận</Title>
+         <div style={{ marginBottom: '8px' }}>
+           <Text>Số ngày bồi thường trong thời gian vi phạm là: </Text>
+           <Text strong style={{ marginLeft: '5px', color: '#d4380d' }}>
+             {conclusion.totalCompensation?.toFixed(1)} ngày
+           </Text>
+         </div>
+         <div style={{ marginBottom: '8px', paddingLeft: '15px' }}>
+           <Text>1. Số ngày SDĐ theo giá cũ </Text>
+           {conclusion.overallStartDate && conclusion.oldPriceEndDate && (
+             <Text>(Từ {conclusion.overallStartDate.format('DD/MM/YYYY')} ÷ {conclusion.oldPriceEndDate.format('DD/MM/YYYY')}): </Text>
+           )}
+           <Text strong style={{ marginLeft: '5px' }}>
+             {conclusion.oldPriceDays?.toFixed(1)} ngày
+           </Text>
+         </div>
+         <div style={{ paddingLeft: '15px' }}>
+           <Text>2. Số ngày SDĐ theo giá bán điện mới </Text>
+           {conclusion.newPriceStartDate && conclusion.overallEndDate && (
+             <Text>(Từ {conclusion.newPriceStartDate.format('DD/MM/YYYY')} ÷ {conclusion.overallEndDate.format('DD/MM/YYYY')}): </Text>
+           )}
+           <Text strong style={{ marginLeft: '5px' }}>
+             {conclusion.newPriceDays?.toFixed(1)} ngày
+           </Text>
+         </div>
+      </div>
 
       {!readOnly && (
         <div style={{ marginTop: 20, display: 'flex', gap: 20 }}>

@@ -20,7 +20,46 @@ const applyHeaderStyle = (cell) => {
     right: { style: 'thin' }
   };
 };
+const calculateConclusionDataForExcel = (data) => {
+  if (!data || data.length === 0) {
+    return {
+      totalCompensation: 0,
+      oldPriceDays: 0,
+      newPriceDays: 0,
+      overallStartDate: null,
+      overallEndDate: null,
+      oldPriceEndDate: dayjs('2024-10-10'), // Fixed date
+      newPriceStartDate: dayjs('2024-10-11') // Fixed date
+    };
+  }
 
+  let oldPriceDays = 0;
+  let newPriceDays = 0;
+  let totalCompensation = 0;
+  let overallStartDate = dayjs(data[0].startDate);
+  let overallEndDate = dayjs(data[data.length - 1].endDate);
+
+  data.forEach(item => {
+      const itemCompensationDays = Math.max(0,(item.violationDays || 0) - (item.outageDays || 0));
+      totalCompensation += itemCompensationDays;
+
+      if (item.isOldPrice) {
+          oldPriceDays += itemCompensationDays;
+      } else {
+          newPriceDays += itemCompensationDays;
+      }
+  });
+
+  return {
+    totalCompensation,
+    oldPriceDays,
+    newPriceDays,
+    overallStartDate,
+    overallEndDate,
+    oldPriceEndDate: dayjs('2024-10-10'), // Fixed date
+    newPriceStartDate: dayjs('2024-10-11') // Fixed date
+  };
+};
 const applyTitleStyle = (cell, isUnderlined = false) => {
   cell.font = {
     name: 'Times New Roman',
@@ -300,18 +339,62 @@ export const exportViolationTimeAgreement = async (data) => {
     });
 
     // Add conclusion
-    const conclusionRow = rowIndex + 2;
-    worksheet.mergeCells(`A${conclusionRow}:F${conclusionRow}`);
-    const conclusion = worksheet.getCell(`A${conclusionRow}`);
-    conclusion.value = `Kết luận: Số ngày bồi thường trong thời gian vi phạm là: ${totals.compensationDays.toFixed(1)} ngày`;
-    conclusion.font = { name: 'Times New Roman', size: 11 };
+    // --- Add Conclusion Section ---
+    let conclusionRowIndex = rowIndex + 1; // Start conclusion right after total row
+    const conclusionData = calculateConclusionDataForExcel(data);
 
-    // Add device usage period section
-    const usagePeriodRow = conclusionRow + 2;
+    // Row 1: Tổng số ngày
+    worksheet.mergeCells(`A${conclusionRowIndex}:D${conclusionRowIndex}`); // Merge A to D
+    const conclusionTotalCellLabel = worksheet.getCell(`A${conclusionRowIndex}`);
+    conclusionTotalCellLabel.value = 'Kết luận: Số ngày bồi thường trong thời gian vi phạm là:';
+    conclusionTotalCellLabel.font = { name: 'Times New Roman', size: 11, bold: true };
+    conclusionTotalCellLabel.alignment = { vertical: 'middle', horizontal: 'left' };
+
+    worksheet.mergeCells(`E${conclusionRowIndex}:F${conclusionRowIndex}`); // Merge E to F
+    const conclusionTotalCellValue = worksheet.getCell(`E${conclusionRowIndex}`);
+    conclusionTotalCellValue.value = `${conclusionData.totalCompensation.toFixed(1)} ngày`;
+    conclusionTotalCellValue.font = { name: 'Times New Roman', size: 11, bold: true, color: { argb: 'FFFF0000'} }; // Red color
+    conclusionTotalCellValue.alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getRow(conclusionRowIndex).height = 20;
+
+    // Row 2: Giá cũ
+    conclusionRowIndex++;
+    worksheet.mergeCells(`A${conclusionRowIndex}:D${conclusionRowIndex}`);
+    const conclusionOldPriceLabel = worksheet.getCell(`A${conclusionRowIndex}`);
+    conclusionOldPriceLabel.value = `   1. Số ngày SDĐ theo giá cũ (Từ ${conclusionData.overallStartDate.format('DD/MM/YYYY')} ÷ ${conclusionData.oldPriceEndDate.format('DD/MM/YYYY')})`;
+    conclusionOldPriceLabel.font = { name: 'Times New Roman', size: 11 };
+    conclusionOldPriceLabel.alignment = { vertical: 'middle', horizontal: 'left' };
+
+    worksheet.mergeCells(`E${conclusionRowIndex}:F${conclusionRowIndex}`);
+    const conclusionOldPriceValue = worksheet.getCell(`E${conclusionRowIndex}`);
+    conclusionOldPriceValue.value = `${conclusionData.oldPriceDays.toFixed(1)} ngày`;
+    conclusionOldPriceValue.font = { name: 'Times New Roman', size: 11, bold: true };
+    conclusionOldPriceValue.alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getRow(conclusionRowIndex).height = 20;
+
+    // Row 3: Giá mới
+    conclusionRowIndex++;
+    worksheet.mergeCells(`A${conclusionRowIndex}:D${conclusionRowIndex}`);
+    const conclusionNewPriceLabel = worksheet.getCell(`A${conclusionRowIndex}`);
+    conclusionNewPriceLabel.value = `   2. Số ngày SDĐ theo giá bán điện mới (Từ ${conclusionData.newPriceStartDate.format('DD/MM/YYYY')} ÷ ${conclusionData.overallEndDate.format('DD/MM/YYYY')})`;
+    conclusionNewPriceLabel.font = { name: 'Times New Roman', size: 11 };
+    conclusionNewPriceLabel.alignment = { vertical: 'middle', horizontal: 'left' };
+
+    worksheet.mergeCells(`E${conclusionRowIndex}:F${conclusionRowIndex}`);
+    const conclusionNewPriceValue = worksheet.getCell(`E${conclusionRowIndex}`);
+    conclusionNewPriceValue.value = `${conclusionData.newPriceDays.toFixed(1)} ngày`;
+    conclusionNewPriceValue.font = { name: 'Times New Roman', size: 11, bold: true };
+    conclusionNewPriceValue.alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getRow(conclusionRowIndex).height = 20;
+    // --- End Conclusion Section ---
+
+    // Add device usage period section (adjust row index)
+    let usagePeriodRow = conclusionRowIndex + 2; // Start after conclusion
     worksheet.mergeCells(`A${usagePeriodRow}:F${usagePeriodRow}`);
     const usagePeriod = worksheet.getCell(`A${usagePeriodRow}`);
     usagePeriod.value = '2. Thời gian sử dụng thiết bị trong thời gian vi phạm';
     usagePeriod.font = { name: 'Times New Roman', size: 11, bold: true };
+
 
     // Add usage details
     const usageDetails = [
