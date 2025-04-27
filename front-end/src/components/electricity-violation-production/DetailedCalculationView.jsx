@@ -37,7 +37,9 @@ const DetailedCalculationView = () => {
       oldPeriodDays,
       newPeriodDays,
       totalDailyUsage,
-      paidElectricity
+      paidElectricity,
+      OLD_PRICE,
+      NEW_PRICE,
     });
   };
   

@@ -9,6 +9,7 @@ import {
   LoadingOutlined
 } from '@ant-design/icons';
 import CompensationCalculator from '../components/electricity-violation/CompensationCalculator';
+import CompensationCalculator2 from '../components/electricity-violation/CompensationCalculator2';
 import AdditionalInfo from '../components/electricity-violation/additional-info/AdditionalInfo';
 import DeviceInventory from '../components/electricity-violation/DeviceInventory';
 import { useSharedData } from '../context//electricity-violation/SharedDataContext';
@@ -112,13 +113,23 @@ const ElectricityViolation = () => {
       label: (
         <span>
           <CalculatorOutlined />
-          Thỏa thuận thời gian VP
+          Thỏa thuận thời gian VP-SH
         </span>
       ),
       children: <CompensationCalculator />
     },
     {
       key: '4',
+      label: (
+        <span>
+          <CalculatorOutlined />
+          Thỏa thuận thời gian VP-KD
+        </span>
+      ),
+      children: <CompensationCalculator2 />
+    },
+    {
+      key: '5',
       label: (
         <span>
           <InfoCircleOutlined />

@@ -83,7 +83,9 @@ export const exportDetailedCalculation = async ({
   newPeriodDays,
   totalDailyUsage,
   paidElectricity,
-  customerInfo
+  customerInfo,
+  OLD_PRICE,
+  NEW_PRICE
 }) => {
   try {
     const workbook = new ExcelJS.Workbook();
@@ -322,11 +324,11 @@ export const exportDetailedCalculation = async ({
     // Add summary rows
     const oldPeriodUsage = totalDailyUsage * oldPeriodDays;
     const oldPeriodCompensation = oldPeriodUsage - paidElectricity.old;
-    const oldPeriodTotal = oldPeriodCompensation * 2870;
+    const oldPeriodTotal = oldPeriodCompensation * OLD_PRICE;
 
     const newPeriodUsage = totalDailyUsage * newPeriodDays;
     const newPeriodCompensation = newPeriodUsage - paidElectricity.new;
-    const newPeriodTotal = newPeriodCompensation * 3007;
+    const newPeriodTotal = newPeriodCompensation * NEW_PRICE;
 
     // Add total daily usage row
     const dailyRow = worksheet.getRow(currentRow);
@@ -346,7 +348,7 @@ export const exportDetailedCalculation = async ({
     oldRow.getCell(10).value = oldPeriodUsage?.toFixed(3);
     oldRow.getCell(11).value = paidElectricity.old;
     oldRow.getCell(12).value = oldPeriodCompensation?.toFixed(3);
-    oldRow.getCell(13).value = 2870;
+    oldRow.getCell(13).value = OLD_PRICE;
     oldRow.getCell(14).value = oldPeriodTotal;
     oldRow.eachCell(cell => applyCellStyle(cell, { center: true }));
     currentRow++;
@@ -360,7 +362,7 @@ export const exportDetailedCalculation = async ({
     newRow.getCell(10).value = newPeriodUsage?.toFixed(3);
     newRow.getCell(11).value = paidElectricity.new;
     newRow.getCell(12).value = newPeriodCompensation?.toFixed(3);
-    newRow.getCell(13).value = 3007;
+    newRow.getCell(13).value = NEW_PRICE;
     newRow.getCell(14).value = newPeriodTotal;
     newRow.eachCell(cell => applyCellStyle(cell, { center: true }));
     currentRow++;
