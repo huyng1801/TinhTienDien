@@ -34,28 +34,21 @@ const DetailedCalculationView = () => {
     new: 4215
   });
 
-  // --- Memoized Calculation for Period Days ---
-  const { oldPeriodDays, newPeriodDays } = useMemo(() => {
-    // console.log("Recalculating period days"); // For debugging memoization
-    return compensationData.reduce((acc, period) => {
-      const startDate = dayjs(period.startDate);
-      // const endDate = dayjs(period.endDate); // Not used in current logic but good to have if needed
-      const compensationDays = period.compensationDays || 0;
+// Calculate period days based on compensationData
+const { oldPeriodDays, newPeriodDays } = compensationData.reduce((acc, period) => {
+  const startDate = dayjs(period.startDate);
+  const endDate = dayjs(period.endDate);
+  const compensationDays = Math.max(0, (period.violationDays || 0) - (period.outageDays || 0));
 
-      // Determine period based on start date relative to price change date
-      // Note: This logic assumes periods don't cross the PRICE_CHANGE_DATE.
-      // If they can, a more complex calculation splitting days within the period is needed.
-      if (startDate.isBefore(PRICE_CHANGE_DATE)) {
-        acc.oldPeriodDays += compensationDays;
-      } else {
-        acc.newPeriodDays += compensationDays;
-      }
-      // The specific month/year logic from original code is removed in favor of date comparison
-      // Re-add if that specific logic is strictly required for Oct 2024 edge case.
+  // Determine period based on price change date
+  if (period.isOldPrice) {
+    acc.oldPeriodDays += compensationDays;
+  } else {
+    acc.newPeriodDays += compensationDays;
+  }
 
-      return acc;
-    }, { oldPeriodDays: 0, newPeriodDays: 0 });
-  }, [compensationData]); // Recalculate only if compensationData changes
+  return acc;
+}, { oldPeriodDays: 0, newPeriodDays: 0 });
 
   // --- Effect to Initialize/Update Devices from Inventory ---
   useEffect(() => {

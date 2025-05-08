@@ -294,7 +294,7 @@ const CompensationCalculator = ({ readOnly, initialData }) => {
           </Table.Summary>
         )}
       />
- <div style={{ marginTop: 20, padding: '15px', border: '1px solid #f0f0f0', borderRadius: '4px', backgroundColor: '#fff' }}>
+ {/* <div style={{ marginTop: 20, padding: '15px', border: '1px solid #f0f0f0', borderRadius: '4px', backgroundColor: '#fff' }}>
          <Title level={5} style={{ marginBottom: '15px', color: '#0050b3' }}>Kết luận</Title>
          <div style={{ marginBottom: '8px' }}>
            <Text>Số ngày bồi thường trong thời gian vi phạm là: </Text>
@@ -320,7 +320,7 @@ const CompensationCalculator = ({ readOnly, initialData }) => {
              {conclusion.newPriceDays?.toFixed(1)} ngày
            </Text>
          </div>
-      </div>
+      </div> */}
 
       {!readOnly && (
         <div style={{ marginTop: 20, display: 'flex', gap: 20 }}>

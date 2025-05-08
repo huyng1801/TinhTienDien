@@ -154,9 +154,9 @@ const SummaryTab = ({ calculationData }) => {
             <Text>Tổng cộng: 3 = 1 + 2: {totalAmount.toLocaleString()} đồng</Text>
             <Text>Điện năng bồi thường: {totals.totalCompensationUsage.toFixed(2)} kWh</Text>
             <Text>Tiền điện bồi thường: {totalAmount.toLocaleString()} đồng</Text>
-            <Text>Thuế VAT 8%: {vat.toLocaleString()} đồng</Text>
+            {/* <Text>Thuế VAT 8%: {vat.toLocaleString()} đồng</Text>
             <Text strong>Tổng tiền điện bồi thường: {finalTotal.toLocaleString()} đồng</Text>
-            <Text>Chênh lệch điện năng: {(totals.totalPowerUsage - totals.totalPaidUsage).toFixed(2)} kWh</Text>
+            <Text>Chênh lệch điện năng: {(totals.totalPowerUsage - totals.totalPaidUsage).toFixed(2)} kWh</Text> */}
           </Space>
         </Card>
       </Space>
